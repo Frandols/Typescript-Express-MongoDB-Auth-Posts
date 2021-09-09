@@ -1,5 +1,4 @@
 import { object, string } from 'yup'
-import { createPost } from '../service/post.service'
 
 export const createPostSchema = object({
     body: object({

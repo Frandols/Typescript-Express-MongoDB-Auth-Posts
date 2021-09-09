@@ -39,18 +39,42 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = exports.sign = void 0;
-var config_1 = __importDefault(require("config"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-var privateKey = config_1.default.get('privateKey');
-function sign(object, options) {
-    return jsonwebtoken_1.default.sign(object, privateKey, options);
-}
-exports.sign = sign;
-function auth(token) {
-    var _this = this;
-    return jsonwebtoken_1.default.verify(token, privateKey, function (_, id) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-        return [2 /*return*/, id];
-    }); }); });
-}
-exports.auth = auth;
+var mongoose_1 = __importDefault(require("mongoose"));
+var bcrypt_1 = __importDefault(require("bcrypt"));
+var UserSchema = new mongoose_1.default.Schema({
+    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    password: { type: String, required: true }
+}, { timestamps: true });
+UserSchema.pre('save', function (next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user, salt, hash;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    user = this;
+                    if (!user.isModified('password'))
+                        return [2 /*return*/, next()];
+                    return [4 /*yield*/, bcrypt_1.default.genSalt(10)];
+                case 1:
+                    salt = _a.sent();
+                    return [4 /*yield*/, bcrypt_1.default.hashSync(user.password, salt)];
+                case 2:
+                    hash = _a.sent();
+                    user.password = hash;
+                    return [2 /*return*/, next()];
+            }
+        });
+    });
+});
+UserSchema.methods.comparePassword = function (candidatePassword) {
+    return __awaiter(this, void 0, void 0, function () {
+        var user;
+        return __generator(this, function (_a) {
+            user = this;
+            return [2 /*return*/, bcrypt_1.default.compare(candidatePassword, user.password).catch(function (error) { return false; })];
+        });
+    });
+};
+var User = mongoose_1.default.model('User', UserSchema);
+exports.default = User;

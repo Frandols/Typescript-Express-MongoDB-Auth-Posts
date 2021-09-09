@@ -1,5 +1,5 @@
+require('dotenv').config()
 import express from 'express'
-import config from 'config'
 import cors from 'cors'
 import log from './logger'
 import connect from './db/connect'
@@ -7,8 +7,8 @@ import routes from './routes'
 
 const app = express()
 
-const host = config.get('host') as string
-const port = config.get('port') as number
+const host = process.env.HOST as string
+const port = 3000
 
 app.use(cors())
 app.use(express.json())

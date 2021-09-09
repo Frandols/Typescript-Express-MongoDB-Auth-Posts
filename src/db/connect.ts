@@ -1,9 +1,9 @@
+require('dotenv').config()
 import mongoose from 'mongoose'
-import config from 'config'
 import log from '../logger'
 
 function connect() {
-    const dbUri = config.get('dbUri') as string
+    const dbUri = process.env.DB_URI as string
 
     return mongoose
     .connect(dbUri, {
