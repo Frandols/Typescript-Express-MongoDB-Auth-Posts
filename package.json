@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/server.ts"
+    "start": "nodemon --config nodemon.json src/server.ts"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
