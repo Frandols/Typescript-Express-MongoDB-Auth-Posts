@@ -10,8 +10,9 @@ var logger_1 = __importDefault(require("./logger"));
 var connect_1 = __importDefault(require("./db/connect"));
 var routes_1 = __importDefault(require("./routes"));
 var app = (0, express_1.default)();
+// @ts-ignore
+var port = process.env.PORT || 3000;
 var host = process.env.HOST;
-var port = 3000;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));

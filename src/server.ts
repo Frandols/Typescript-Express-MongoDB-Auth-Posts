@@ -7,8 +7,9 @@ import routes from './routes'
 
 const app = express()
 
+// @ts-ignore
+const port = process.env.PORT as number || 3000
 const host = process.env.HOST as string
-const port = 3000
 
 app.use(cors())
 app.use(express.json())
